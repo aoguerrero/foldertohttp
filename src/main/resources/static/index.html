@@ -1,8 +1,17 @@
-<html>
+<!DOCTYPE html>
+<html ng-app="myApp">
 <head>
-<title>Folder to HTTP</title>
-</head>
+  <meta charset="utf-8">
+  <title>folder2http</title>
+  <link rel="stylesheet" href="lib/bootstrap/css/bootstrap.min.css">
+  <link rel="stylesheet" href="app.css">
+ </head>
 <body>
-<p>Folder to HTTP</p>
+  <div ng-view></div>
+  <script src="lib/angular/angular.min.js"></script>
+  <script src="lib/angular-ui-router/angular-ui-router.min.js"></script>
+  <script src="app.js"></script>
+  <script src="view1/view1.js"></script>
+  <script src="view2/view2.js"></script>
 </body>
 </html>
