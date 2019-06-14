@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import io.github.aoguerrero.foldertohttp.model.LoginData;
+import io.github.aoguerrero.foldertohttp.model.Token;
 import io.github.aoguerrero.foldertohttp.utils.EncDec;
 
 @RestController
@@ -44,18 +45,18 @@ public class LoginController {
 
 	@CrossOrigin(origins = "*")
 	@RequestMapping(value = "/login", method = RequestMethod.POST)
-	public ResponseEntity<String> login(@RequestBody LoginData loginData) {
+	public ResponseEntity<Token> login(@RequestBody LoginData loginData) {
 		try {
 			if (loginData.getUsername().equals(username) && loginData.getPassword().equals(password)) {
 				String tLogin = sdf.format(new Date());
 				String token = encDec.encrypt(tLogin);
-				return new ResponseEntity<String>(token, HttpStatus.OK);
+				return new ResponseEntity<Token>(new Token(token), HttpStatus.OK);
 			} else {
-				return new ResponseEntity<String>(HttpStatus.UNAUTHORIZED);
+				return new ResponseEntity<Token>(HttpStatus.UNAUTHORIZED);
 			}
 		} catch (Exception e) {
 			logger.error("Login error", e);
-			return new ResponseEntity<String>(HttpStatus.INTERNAL_SERVER_ERROR);
+			return new ResponseEntity<Token>(HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
 

@@ -1,17 +1,44 @@
 <!DOCTYPE html>
-<html ng-app="myApp">
+<html ng-app="foldertohttpApp">
+
 <head>
   <meta charset="utf-8">
   <title>folder2http</title>
   <link rel="stylesheet" href="lib/bootstrap/css/bootstrap.min.css">
   <link rel="stylesheet" href="app.css">
- </head>
+</head>
+
 <body>
-  <div ng-view></div>
+  <br/>
+  <div ng-controller="mainController">
+
+    <!-- Login-->
+    <div class="container" ng-show="!goList">
+      <form>
+        <div class="form-group">
+          <label for="usernameInput">Username</label>
+          <input type="text" class="form-control" id="usernameInput" ng-model="loginData.username">
+        </div>
+        <div class="form-group">
+          <label for="passwordInput">Password</label>
+          <input type="password" class="form-control" id="passwordInput" ng-model="loginData.password">
+        </div>
+        <button type="button" class="btn btn-primary" ng-click="login()">Ingresar</button>
+      </form>
+      {{token}}
+    </div>
+
+    <!-- Listing files -->
+    <div class="container" ng-show="goList">
+      <div class="list-group">
+        <a href="#" class="list-group-item list-group-item-action" ng-repeat="dir in dirs">${dir.name}</a>
+        <a href="#" class="list-group-item list-group-item-action" ng-repeat="file in files">${file.name}</a>
+      </div>
+    </div>
+
+  </div>
   <script src="lib/angular/angular.min.js"></script>
-  <script src="lib/angular-ui-router/angular-ui-router.min.js"></script>
   <script src="app.js"></script>
-  <script src="view1/view1.js"></script>
-  <script src="view2/view2.js"></script>
 </body>
+
 </html>
