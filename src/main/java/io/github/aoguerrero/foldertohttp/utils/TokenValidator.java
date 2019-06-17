@@ -33,14 +33,18 @@ public class TokenValidator {
 		sessionTimeout = Long.valueOf(env.getRequiredProperty("login.sessionTimeout")) * 1000;
 	}
 
-	public boolean validate(HttpHeaders headers) {
+	public boolean validateHeader(HttpHeaders headers) {
 		List<String> headerValues = headers.get("token");
 		if (headerValues == null || headerValues.size() == 0) {
 			logger.warn("Invalid headers");
 			return false;
 		}
+		String token = headerValues.get(0);
+		return validateToken(token);
+	}
+
+	public boolean validateToken(String token) {
 		try {
-			String token = headerValues.get(0);
 			Date loginDate = sdf.parse(encDec.decrypt(token));
 			Date now = new Date();
 			Long dif = now.getTime() - loginDate.getTime();

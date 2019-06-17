@@ -9,11 +9,13 @@ app.controller("mainController", ["$scope", "$http", function ($scope, $http) {
 
   var currentPath = [];
 
+  $scope.backend = "";
+
   /* ******************************************************************************** */
 
   $scope.loginData = {
-    username: "user",
-    password: "secret1"
+    username: "",
+    password: ""
   }
 
   /* ******************************************************************************** */
@@ -21,7 +23,7 @@ app.controller("mainController", ["$scope", "$http", function ($scope, $http) {
   $scope.login = function () {
     $http({
       method: "POST",
-      url: "http://localhost:8080/login",
+      url: $scope.backend+"/login",
       data: $scope.loginData
     }).then(function (response) {
       $scope.token = response.data.token;
@@ -37,7 +39,7 @@ app.controller("mainController", ["$scope", "$http", function ($scope, $http) {
       currentPath.push(path);
     $http({
       method: "GET",
-      url: "http://localhost:8080/list" + $scope.printCurrentPath(),
+      url: $scope.backend+"/list" + $scope.printCurrentPath(),
       headers: {
         "token": $scope.token
       }
@@ -65,10 +67,14 @@ app.controller("mainController", ["$scope", "$http", function ($scope, $http) {
     $scope.list();
   }
 
-  $scope.download = function (path) {
-  }
-
   $scope.logout = function () {
+    $scope.token = "";
+    $scope.goList = false;
+    var currentPath = [];
+    $scope.loginData = {
+      username: "",
+      password: ""
+    }
   }
 
   /* ******************************************************************************** */
