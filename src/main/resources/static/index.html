@@ -4,12 +4,14 @@
 <head>
   <meta charset="utf-8">
   <title>folder2http</title>
+  <script src="lib/angular/angular.min.js"></script>
+  <script src="app.js"></script>
   <link rel="stylesheet" href="lib/bootstrap/css/bootstrap.min.css">
   <link rel="stylesheet" href="app.css">
 </head>
 
 <body>
-  <br/>
+  <br />
   <div ng-controller="mainController">
 
     <!-- Login-->
@@ -25,20 +27,21 @@
         </div>
         <button type="button" class="btn btn-primary" ng-click="login()">Ingresar</button>
       </form>
-      {{token}}
     </div>
 
     <!-- Listing files -->
-    <div class="container" ng-show="goList">
+    <div class="container" ng-show="goList" ng-cloak>
+      <p>{{printCurrentPath()}}</p>
       <div class="list-group">
-        <a href="#" class="list-group-item list-group-item-action" ng-repeat="dir in dirs">${dir.name}</a>
-        <a href="#" class="list-group-item list-group-item-action" ng-repeat="file in files">${file.name}</a>
+        <a href="#" class="list-group-item list-group-item-action" ng-click="back()">Atrás</a>
+        <a href="#" class="list-group-item list-group-item-action" ng-click="list(dir.name)"
+          ng-repeat="dir in dirs"><img src="/img/folder-2x.png" class="icon">{{dir.name}}</a>
+        <a href="#" class="list-group-item list-group-item-action" ng-repeat="file in files"><img src="/img/file-2x.png"
+            class="icon">{{file.name}}</a>
       </div>
     </div>
 
   </div>
-  <script src="lib/angular/angular.min.js"></script>
-  <script src="app.js"></script>
 </body>
 
 </html>
