@@ -42,14 +42,17 @@ public class PathAccessController {
 	private TokenValidator tokenValidator;
 
 	private String basePath;
+	
+	private String[] extensions;
 
 	@PostConstruct
 	private void init() {
 		basePath = env.getRequiredProperty("files.basePath");
+		extensions = env.getRequiredProperty("files.extensions").split(",");
 	}
 
 	@CrossOrigin(origins = "*")
-	@RequestMapping(value = "/list/**", method = RequestMethod.GET)
+	@RequestMapping(value = "**/list/**", method = RequestMethod.GET)
 	public ResponseEntity<List<FileItem>> list(HttpServletRequest request, @RequestHeader HttpHeaders headers) {
 
 		if (!tokenValidator.validateHeader(headers)) {
@@ -57,7 +60,8 @@ public class PathAccessController {
 		}
 
 		String path = (String) request.getAttribute(HandlerMapping.PATH_WITHIN_HANDLER_MAPPING_ATTRIBUTE);
-		int listLength = "/list/".length();
+		
+		int listLength = path.indexOf("/list/") + "/list/".length();
 
 		try {
 			String fullPath = basePath;
@@ -69,7 +73,16 @@ public class PathAccessController {
 				List<FileItem> items = new ArrayList<>();
 				for (String itemName : fileBasePath.list()) {
 					File fileItem = new File(fullPath + "/" + itemName);
-					items.add(new FileItem(fileItem.isDirectory() ? "D" : "F", itemName, fileItem.length()));
+					if(fileItem.isDirectory()) {
+						items.add(new FileItem("D", itemName, fileItem.length()));
+					} else {
+						for(String ext : extensions) {
+							if(ext.equals("*") || itemName.endsWith(ext)) {
+								items.add(new FileItem("F", itemName, fileItem.length()));;
+								break;
+							}
+						}
+					}
 				}
 				return new ResponseEntity<List<FileItem>>(items, HttpStatus.OK);
 			} else {
@@ -82,7 +95,7 @@ public class PathAccessController {
 	}
 
 	@CrossOrigin(origins = "*")
-	@RequestMapping(value = "/download/**", method = RequestMethod.GET)
+	@RequestMapping(value = "**/download/**", method = RequestMethod.GET)
 	public void download(@RequestParam String token, HttpServletRequest request, HttpServletResponse response, @RequestHeader HttpHeaders headers)
 			throws IOException {
 
@@ -93,7 +106,7 @@ public class PathAccessController {
 
 
 		String path = (String) request.getAttribute(HandlerMapping.PATH_WITHIN_HANDLER_MAPPING_ATTRIBUTE);
-		int downloadLength = "/download/".length();
+		int downloadLength = path.indexOf("/download/") + "/download/".length();
 
 		try {
 			String fullPath = basePath + "/" + path.substring(downloadLength, path.length());

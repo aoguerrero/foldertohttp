@@ -34,7 +34,7 @@ app.controller("mainController", ["$scope", "$http", function ($scope, $http) {
       $scope.goList = true;
       $scope.list();
     }, function (error) {
-
+        window.alert("Usuario o contraseña no válidos");
     });
   }
 
@@ -60,7 +60,7 @@ app.controller("mainController", ["$scope", "$http", function ($scope, $http) {
       })
 
     }, function (error) {
-
+        window.alert("Ocurrió un error consultando la lista de archivos");
     });
   }
 

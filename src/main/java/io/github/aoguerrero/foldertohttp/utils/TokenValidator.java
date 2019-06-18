@@ -26,11 +26,13 @@ public class TokenValidator {
 
 	private SimpleDateFormat sdf;
 	private Long sessionTimeout;
+	private String apikey;
 
 	@PostConstruct
 	public void init() {
 		sdf = new SimpleDateFormat("ddMMyyyyHHmmss");
 		sessionTimeout = Long.valueOf(env.getRequiredProperty("login.sessionTimeout")) * 1000;
+		apikey = env.getProperty("service.apikey");
 	}
 
 	public boolean validateHeader(HttpHeaders headers) {
@@ -45,6 +47,12 @@ public class TokenValidator {
 
 	public boolean validateToken(String token) {
 		try {
+			if(apikey != null) {
+				if(token.equals(apikey)) {
+					return true;
+				}
+			}
+			
 			Date loginDate = sdf.parse(encDec.decrypt(token));
 			Date now = new Date();
 			Long dif = now.getTime() - loginDate.getTime();
