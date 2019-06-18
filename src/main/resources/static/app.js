@@ -3,7 +3,11 @@
 var app = angular.module("foldertohttpApp", []);
 app.controller("mainController", ["$scope", "$http", function ($scope, $http) {
 
-  $scope.token = "";
+  var token = "";
+
+  $scope.getToken = function() {
+    return encodeURIComponent(token);
+  }
 
   $scope.goList = false;
 
@@ -26,7 +30,7 @@ app.controller("mainController", ["$scope", "$http", function ($scope, $http) {
       url: $scope.backend+"/login",
       data: $scope.loginData
     }).then(function (response) {
-      $scope.token = response.data.token;
+      token = response.data.token;
       $scope.goList = true;
       $scope.list();
     }, function (error) {
@@ -41,7 +45,7 @@ app.controller("mainController", ["$scope", "$http", function ($scope, $http) {
       method: "GET",
       url: $scope.backend+"/list" + $scope.printCurrentPath(),
       headers: {
-        "token": $scope.token
+        "token": token
       }
     }).then(function (response) {
       $scope.dirs = [];
@@ -68,7 +72,7 @@ app.controller("mainController", ["$scope", "$http", function ($scope, $http) {
   }
 
   $scope.logout = function () {
-    $scope.token = "";
+    token = "";
     $scope.goList = false;
     var currentPath = [];
     $scope.loginData = {

@@ -27,14 +27,14 @@
 
       <form>
         <div class="form-group">
-          <label for="usernameInput">Username</label>
-          <input type="text" class="form-control" id="usernameInput" ng-model="loginData.username">
+          <label>Username</label>
+          <input type="text" class="form-control" ng-model="loginData.username">
         </div>
         <div class="form-group">
-          <label for="passwordInput">Password</label>
-          <input type="password" class="form-control" id="passwordInput" ng-model="loginData.password">
+          <label>Password</label>
+          <input type="password" class="form-control" ng-model="loginData.password">
         </div>
-        <button type="button" class="btn btn-secondary" ng-click="login()">Ingresar</button>
+        <button type="submit" class="btn btn-secondary" ng-click="login()">Ingresar</button>
       </form>
     </div>
 
@@ -59,7 +59,7 @@
             class="icon"></img>Atrás</a>
         <a href="#" class="list-group-item list-group-item-action" ng-repeat="dir in dirs"
           ng-click="list(dir.name)"><img src="/img/folder-2x.png" class="icon"></img>{{dir.name}}</a>
-        <a ng-href="/download{{printCurrentPath()}}/{{file.name}}"
+        <a ng-href="/download{{printCurrentPath()}}/{{file.name}}?token={{getToken()}}"
           class="list-group-item list-group-item-action" ng-repeat="file in files"><img src="/img/file-2x.png"
             class="icon"></img>{{file.name}}</a>
       </div>
