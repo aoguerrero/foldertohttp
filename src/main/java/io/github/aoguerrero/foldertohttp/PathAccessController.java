@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.HandlerMapping;
 
@@ -82,15 +83,15 @@ public class PathAccessController {
 
 	@CrossOrigin(origins = "*")
 	@RequestMapping(value = "/download/**", method = RequestMethod.GET)
-	public void download(HttpServletRequest request, HttpServletResponse response, @RequestHeader HttpHeaders headers)
+	public void download(@RequestParam String token, HttpServletRequest request, HttpServletResponse response, @RequestHeader HttpHeaders headers)
 			throws IOException {
-		/*
-		 * @RequestParam String token, 
-		 * if(!tokenValidator.validateToken(token)) {
-		 *   response.sendError(401); 
-		 *   return; 
-		 * }
-		 */
+
+		if(!tokenValidator.validateToken(token)) {
+			response.sendError(401);
+			return;
+		}
+
+
 		String path = (String) request.getAttribute(HandlerMapping.PATH_WITHIN_HANDLER_MAPPING_ATTRIBUTE);
 		int downloadLength = "/download/".length();
 
