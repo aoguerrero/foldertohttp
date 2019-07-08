@@ -44,7 +44,7 @@ public class LoginController {
 	}
 
 	@CrossOrigin(origins = "*")
-	@RequestMapping(value = "**/login", method = RequestMethod.POST)
+	@RequestMapping(value = "/login", method = RequestMethod.POST)
 	public ResponseEntity<Token> login(@RequestBody LoginData loginData) {
 		try {
 			if (loginData.getUsername().equals(username) && loginData.getPassword().equals(password)) {
