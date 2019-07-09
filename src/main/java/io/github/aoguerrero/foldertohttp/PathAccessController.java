@@ -52,12 +52,8 @@ public class PathAccessController {
 	}
 
 	@CrossOrigin(origins = "*")
-	@RequestMapping(value = "**/list/**", method = RequestMethod.GET)
+	@RequestMapping(value = "/list/**", method = RequestMethod.GET)
 	public ResponseEntity<List<FileItem>> list(HttpServletRequest request, @RequestHeader HttpHeaders headers) {
-
-		if (!tokenValidator.validateHeader(headers)) {
-			return new ResponseEntity<List<FileItem>>(HttpStatus.UNAUTHORIZED);
-		}
 
 		String path = (String) request.getAttribute(HandlerMapping.PATH_WITHIN_HANDLER_MAPPING_ATTRIBUTE);
 		
@@ -95,15 +91,9 @@ public class PathAccessController {
 	}
 
 	@CrossOrigin(origins = "*")
-	@RequestMapping(value = "**/download/**", method = RequestMethod.GET)
+	@RequestMapping(value = "/download/**", method = RequestMethod.GET)
 	public void download(@RequestParam String token, HttpServletRequest request, HttpServletResponse response, @RequestHeader HttpHeaders headers)
 			throws IOException {
-
-		if(!tokenValidator.validateToken(token)) {
-			response.sendError(401);
-			return;
-		}
-
 
 		String path = (String) request.getAttribute(HandlerMapping.PATH_WITHIN_HANDLER_MAPPING_ATTRIBUTE);
 		int downloadLength = path.indexOf("/download/") + "/download/".length();
