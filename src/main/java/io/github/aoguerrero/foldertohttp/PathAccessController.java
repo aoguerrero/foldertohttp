@@ -67,10 +67,17 @@ public class PathAccessController {
 			InputStream inputStream = new FileInputStream(file);
 			IOUtils.copy(inputStream, response.getOutputStream());
 			response.flushBuffer();
-
-			file.renameTo(new File(fullPath + ".deleted"));
-			File nodisponible = new File(basePath + "/nodisponible.png");
-			Files.copy(nodisponible.toPath(), (new File(fullPath)).toPath(), StandardCopyOption.REPLACE_EXISTING);
+			
+			/* FIXME */
+			Thread.sleep(5000);
+			
+			try {
+				file.renameTo(new File(fullPath + ".deleted"));
+				File nodisponible = new File(basePath + "/nodisponible.png");
+				Files.copy(nodisponible.toPath(), (new File(fullPath)).toPath(), StandardCopyOption.REPLACE_EXISTING);
+			} catch (Exception e) {
+				logger.error("Error renaming file", e);
+			}
 		} catch (Exception e) {
 			logger.error("Error downloading file {}", path, e);
 			response.sendError(500);
